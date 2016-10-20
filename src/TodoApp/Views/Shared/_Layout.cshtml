@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TodoApp</title>
+    <title>TodoApp</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -32,8 +32,19 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Todo" asp-action="Index">Todo</a></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="Claims">Claims</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -50,6 +61,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="https://cdn.auth0.com/js/lock/10.4/lock.min.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -61,7 +73,25 @@
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="https://cdn.auth0.com/js/lock/10.4/lock.min.js"></script>
     </environment>
+
+    @*<script>
+          var lock = new Auth0Lock('@Model.ClientId', '@Model.Domain', {
+              container: 'root',
+              auth: {
+                redirectUrl: '@Model.CallbackUrl',
+                responseType: 'code',
+                params: {
+                    scope: 'openid profile', //Details: https:///scopes
+                    state: '@Model.State',
+                    nonce: '@Model.Nonce'
+                }
+            }
+          });
+
+          lock.show();
+    </script>*@
 
     @RenderSection("scripts", required: false)
 </body>

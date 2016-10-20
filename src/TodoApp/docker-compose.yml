@@ -1,0 +1,67 @@
+version: '2'
+
+services:
+    todoapi:
+        image: osblue13/todoapicore:latest
+        ports:
+            - "50118:50118"
+        networks:
+            - apicore-network
+        container_name: todoapi
+
+    todoapp:
+        build:
+            context: .
+            dockerfile: DockerFile
+        ports:
+            - "60856:60856"
+        networks:
+            - apicore-network
+        container_name: todoapp
+
+    redisdb:
+        image: redis:latest
+        networks:
+            - apicore-network
+        container_name: redis
+    
+    #wso2am200:
+        #image: osblue13/wso2am-2.0.0:latest
+        #networks:
+            #- apicore-network
+        #container_name: wso2am200
+        #ports:
+           # - "9443:9443"
+           # - "9736:9736"
+           # - "8243:8243"
+           # - "8280:8280"
+           # - "10397:10397"
+           # - "7711:7711"
+    
+    elk:
+        image: sebp/elk:latest
+        networks:
+            - apicore-network
+        container_name: elk
+        ports:
+            - "5601:5601"
+            - "9200:9200"
+            - "5044:5044"
+            - "5000:5000"
+
+    #wso2am191:
+        #image: isim/wso2apim:latest
+        #networks:
+            #- apicore-network
+        #container_name: wso2am191
+        #ports:
+        #    - "9443:9443"
+        #    - "9736:9736"
+        #    - "8243:8243"
+        #    - "8280:8280"
+        #    - "10397:10397"
+        #    - "7711:7711"
+
+networks:
+    apicore-network:
+        driver: bridge

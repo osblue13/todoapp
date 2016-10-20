@@ -1,0 +1,29 @@
+﻿@model IEnumerable<TodoApp.Models.TodoItem>
+<div class="row">
+    <div class="col-md-12">
+
+        <h3>ToDo List</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Item
+                    </th>
+                    <th>
+                        Completed
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.IsComplete</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
