@@ -86,7 +86,7 @@ namespace TodoApp
             });
 
             // Add the OIDC middleware
-            app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions("Auth0")
+            var options = new OpenIdConnectOptions("Auth0")
             {
                 // Set the authority to your Auth0 domain
                 Authority = $"https://{auth0Settings.Value.Domain}",
@@ -134,13 +134,26 @@ namespace TodoApp
 
                                     identity.AddClaim(new Claim(tokenName, tokenValue));
                                 }
+
+                                // Add the Name ClaimType. This is required if we want User.Identity.Name to actually return something!
+                                if (!context.Principal.HasClaim(c => c.Type == ClaimTypes.Name) &&
+                                    identity.HasClaim(c => c.Type == "name"))
+                                    identity.AddClaim(new Claim(ClaimTypes.Name, identity.FindFirst("name").Value));
                             }
                         }
 
                         return Task.FromResult(0);
                     }
                 }
-            });
+            };
+
+            //options.Scope.Clear();
+            //options.Scope.Add("openid");
+            //options.Scope.Add("name");
+            //options.Scope.Add("email");
+            //options.Scope.Add("pictures");
+
+            app.UseOpenIdConnectAuthentication(options);
 
             app.UseMvc(routes =>
             {
